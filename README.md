@@ -103,6 +103,30 @@ dotnet ef migrations add <Name>
 dotnet ef database update        # also applied automatically on startup
 ```
 
+## Bonus: Top Products performance report (ADO.NET vs EF Core)
+
+An Admin-only reporting page compares raw ADO.NET (stored procedure) against EF Core LINQ for the
+same aggregation, with live timing. See **`bonus-report.md`** for the full analysis.
+
+- **Stored procedure:** `Scripts/usp_GetTopProductsByQuantity.sql` — installed automatically on
+  startup (`CREATE OR ALTER`, idempotent) by `DbSeeder`.
+- **Sales data** (Categories/Products/Orders/OrderItems) is seeded automatically on first run.
+- **Service:** `Services/ReportsService.cs` — `GetTopProductsAdoNetAsync` (SqlConnection/SqlCommand/
+  SqlDataReader + stored proc) and `GetTopProductsEfCoreAsync` (LINQ `GroupBy`/`Sum`/`Take`,
+  `AsNoTracking`), plus `BenchmarkAsync` (warm-up + timed loop).
+- **Page:** `/Admin/Reports/TopProducts` (nav: **Reports**, Admin only).
+
+**To run it:**
+1. `docker compose up -d` && `dotnet run`, then log in as **admin@portal.com / Admin@123**.
+2. Go to **Reports** in the navbar (or `/Admin/Reports/TopProducts`).
+3. Set *Top*, optional *Start/End date*, *Min quantity*, *Benchmark runs*, then **Run & Compare**.
+4. The page shows both result sets (with a parity check that they're identical) and the average /
+   min / max execution time for each method.
+
+To capture execution plans for the report, run `EXEC dbo.usp_GetTopProductsByQuantity @Top=10;` and
+the EF-generated SQL (in `bonus-report.md`) in SSMS/Azure Data Studio with *Include Actual Execution
+Plan* enabled.
+
 ## Manual test walkthrough
 
 1. `docker compose up -d` then `dotnet run`.

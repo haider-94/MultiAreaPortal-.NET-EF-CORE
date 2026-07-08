@@ -28,6 +28,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Admin" asp-controller="Events" asp-action="Index">Admin Panel</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Reports" asp-action="TopProducts">Reports</a>
+                            </li>
                         }
                         @if (User.IsInRole("Customer"))
                         {

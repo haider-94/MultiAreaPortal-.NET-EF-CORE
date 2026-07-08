@@ -1,0 +1,105 @@
+@model TopProductsReportViewModel
+@{
+    ViewData["Title"] = "Top Products Report";
+}
+
+<h1 class="h3 mb-1">Top Products by Quantity Sold</h1>
+<p class="text-muted"><small>Compares raw ADO.NET (stored procedure) vs. EF Core LINQ for the same aggregation.</small></p>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="TopProducts" method="post" class="row g-3 align-items-end">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-auto">
+                <label asp-for="Top" class="form-label"></label>
+                <input asp-for="Top" class="form-control" style="width:110px" />
+            </div>
+            <div class="col-auto">
+                <label asp-for="StartDate" class="form-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" />
+            </div>
+            <div class="col-auto">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" />
+            </div>
+            <div class="col-auto">
+                <label asp-for="MinQuantity" class="form-label"></label>
+                <input asp-for="MinQuantity" class="form-control" style="width:130px" />
+            </div>
+            <div class="col-auto">
+                <label asp-for="Runs" class="form-label"></label>
+                <input asp-for="Runs" class="form-control" style="width:130px" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Run &amp; Compare</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.HasRun)
+{
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card border-primary h-100">
+                <div class="card-header">@Model.AdoNetTiming!.Method</div>
+                <div class="card-body">
+                    <div class="display-6">@Model.AdoNetTiming.AverageMs.ToString("0.00") ms</div>
+                    <div class="text-muted">avg over @Model.AdoNetTiming.Runs runs
+                        (min @Model.AdoNetTiming.MinMs.ToString("0.00"), max @Model.AdoNetTiming.MaxMs.ToString("0.00"))</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-secondary h-100">
+                <div class="card-header">@Model.EfCoreTiming!.Method</div>
+                <div class="card-body">
+                    <div class="display-6">@Model.EfCoreTiming.AverageMs.ToString("0.00") ms</div>
+                    <div class="text-muted">avg over @Model.EfCoreTiming.Runs runs
+                        (min @Model.EfCoreTiming.MinMs.ToString("0.00"), max @Model.EfCoreTiming.MaxMs.ToString("0.00"))</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.ResultsMatch)
+    {
+        <div class="alert alert-success py-2">Both methods returned an identical result set (@Model.AdoNetResults.Count rows).</div>
+    }
+    else
+    {
+        <div class="alert alert-danger py-2">Result sets differ between the two methods — investigate.</div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-header">Results (ADO.NET)</div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Product</th><th>Category</th>
+                        <th class="text-end">Total Qty Sold</th><th class="text-end">Total Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var rank = 1; }
+                    @foreach (var row in Model.AdoNetResults)
+                    {
+                        <tr>
+                            <td>@rank</td>
+                            <td>@row.ProductName</td>
+                            <td>@row.CategoryName</td>
+                            <td class="text-end">@row.TotalQuantitySold</td>
+                            <td class="text-end">@row.TotalSalesAmount.ToString("C")</td>
+                        </tr>
+                        rank++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (!Model.AdoNetResults.Any())
+        {
+            <div class="card-body text-muted">No products matched the filters.</div>
+        }
+    </div>
+}
