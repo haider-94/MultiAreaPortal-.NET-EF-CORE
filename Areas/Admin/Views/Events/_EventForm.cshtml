@@ -1,0 +1,26 @@
+@model Event
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="TicketPrice" class="form-label"></label>
+        <input asp-for="TicketPrice" class="form-control" />
+        <span asp-validation-for="TicketPrice" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="EventDate" class="form-label"></label>
+        <input asp-for="EventDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EventDate" class="text-danger"></span>
+    </div>
+</div>

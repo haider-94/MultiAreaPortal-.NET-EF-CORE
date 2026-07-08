@@ -1,0 +1,20 @@
+@model Event
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h1 class="h3 mb-3">Create Event</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <partial name="_EventForm" model="Model" />
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-link">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

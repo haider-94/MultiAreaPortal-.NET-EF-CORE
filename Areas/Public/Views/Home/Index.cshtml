@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="p-5 mb-4 bg-light rounded-3 border">
+    <h1 class="display-5">Welcome to the Event Management Portal</h1>
+    <p class="lead">
+        A role-based ASP.NET Core MVC portal. This public area is open to everyone —
+        no login required.
+    </p>
+    <hr class="my-4" />
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <p>You are signed in as <strong>@User.Identity!.Name</strong>.</p>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="Events" asp-action="Index">Go to Admin Panel</a>
+        }
+        @if (User.IsInRole("Customer"))
+        {
+            <a class="btn btn-primary" asp-area="Customer" asp-controller="Dashboard" asp-action="Index">Go to Customer Dashboard</a>
+        }
+    }
+    else
+    {
+        <p>Sign in to access your area:</p>
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    }
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Public</h5>
+                <p class="card-text">This landing page. Open to anonymous visitors.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Customer</h5>
+                <p class="card-text">A dashboard showing event statistics, powered by raw ADO.NET queries.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Admin</h5>
+                <p class="card-text">Staff-only event management (create, edit, delete) using Entity Framework Core.</p>
+            </div>
+        </div>
+    </div>
+</div>

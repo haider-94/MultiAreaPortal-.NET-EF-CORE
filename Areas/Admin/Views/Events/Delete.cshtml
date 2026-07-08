@@ -1,0 +1,24 @@
+@model Event
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<h1 class="h3 mb-3 text-danger">Delete Event</h1>
+
+<div class="alert alert-warning">Are you sure you want to permanently delete this event?</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Ticket Price</dt><dd class="col-sm-9">@Model.TicketPrice.ToString("C")</dd>
+            <dt class="col-sm-3">Event Date</dt><dd class="col-sm-9">@Model.EventDate.ToString("dddd, dd MMM yyyy HH:mm")</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-link">Cancel</a>
+</form>

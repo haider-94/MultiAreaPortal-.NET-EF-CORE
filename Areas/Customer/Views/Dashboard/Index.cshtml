@@ -1,0 +1,47 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Event Dashboard";
+}
+
+<h1 class="h3 mb-1">Event Dashboard</h1>
+<p class="text-muted"><small>Statistics read directly from SQL Server using raw ADO.NET.</small></p>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <div class="display-6">@Model.TotalEvents</div>
+                <div>Total Events</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">5 Most Recent Events</div>
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-end">Ticket Price</th>
+                    <th>Event Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ev in Model.RecentEvents)
+                {
+                    <tr>
+                        <td>@ev.Name</td>
+                        <td class="text-end">@ev.TicketPrice.ToString("C")</td>
+                        <td>@ev.EventDate.ToString("dd MMM yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (!Model.RecentEvents.Any())
+    {
+        <div class="card-body text-muted">No events have been created yet.</div>
+    }
+</div>

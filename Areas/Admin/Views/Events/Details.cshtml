@@ -1,0 +1,21 @@
+@model Event
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1 class="h3 mb-3">@Model.Name</h1>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Name</dt><dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Description</dt><dd class="col-sm-9">@Model.Description</dd>
+            <dt class="col-sm-3">Ticket Price</dt><dd class="col-sm-9">@Model.TicketPrice.ToString("C")</dd>
+            <dt class="col-sm-3">Event Date</dt><dd class="col-sm-9">@Model.EventDate.ToString("dddd, dd MMM yyyy HH:mm")</dd>
+            <dt class="col-sm-3">Created</dt><dd class="col-sm-9">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm") UTC</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-link">Back to list</a>
